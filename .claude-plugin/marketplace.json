@@ -1,0 +1,18 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "answer-in-korean",
+  "description": "Work in English, reply in Korean, proofread before it is shown.",
+  "owner": {
+    "name": "Seunghyuk Oh",
+    "url": "https://github.com/seunghyukoh"
+  },
+  "plugins": [
+    {
+      "name": "answer-in-korean",
+      "description": "Reasoning, tool calls, code and commits stay English; the final message is Korean and passes through the ko-proofreader subagent before the user sees it.",
+      "source": "./",
+      "category": "productivity",
+      "keywords": ["korean", "output-style", "proofread", "translationese"]
+    }
+  ]
+}
