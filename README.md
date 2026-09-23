@@ -94,7 +94,9 @@ python3 hooks/require-proofread.py --self-test
 
 ## Credits
 
-- [epoko77-ai/im-not-ai](https://github.com/epoko77-ai/im-not-ai): AI-tell taxonomy and the
+- [epoko77-ai/im-not-ai](https://github.com/epoko77-ai/im-not-ai) (MIT): AI-tell taxonomy and the
   post-editing directives (fidelity, locality, removal-only, change budget, modality
   invariance, deterministic anchor gates, "delete, never invent").
-- [snflkd/fluent-korean](https://github.com/snflkd/fluent-korean): the telegraphic-Korean rules.
+- [snflkd/fluent-korean](https://github.com/snflkd/fluent-korean) (MIT): the telegraphic-Korean rules.
+
+Nothing was copied from either repo; the rules were re-derived and rewritten for chat replies.

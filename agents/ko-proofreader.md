@@ -1,6 +1,6 @@
 ---
 name: ko-proofreader
-description: Proofreads a Korean draft reply. Removes translationese and AI tells, restores dropped particles and endings, keeps code, identifiers and facts byte-identical, and returns only the corrected text. The korean-reply output style calls it automatically for replies over about 200 Korean characters; it also works on any Korean text.
+description: Proofreads a Korean draft reply. Removes translationese and AI tells, restores dropped particles and endings, keeps code, identifiers and facts byte-identical, and returns only the corrected text. The korean-reply output style calls it automatically for any Korean reply longer than one or two sentences; it also works on any Korean text.
 model: sonnet
 effort: low
 tools: Read
@@ -123,3 +123,5 @@ Check in this order, then output the text:
 4. No S1 pattern remains. Re-scan every comma for a connective ending before it; this is the most common miss.
 5. You changed under about 30% of the characters and added no content.
 
+Sources: rules distilled from epoko77-ai/im-not-ai (AI-tell taxonomy and post-editing
+directives) and snflkd/fluent-korean (particle and ending rules), both MIT.
