@@ -1,0 +1,22 @@
+{
+  "name": "answer-in-korean",
+  "version": "0.2.0",
+  "description": "Work in English, reply in Korean. Reasoning, tool calls, code and commit messages stay English; the final message is Korean and passes through a proofreader subagent before the user sees it.",
+  "author": {
+    "name": "Seunghyuk Oh",
+    "email": "seunghyukoh0@gmail.com"
+  },
+  "homepage": "https://github.com/seunghyukoh/answer-in-korean",
+  "repository": "https://github.com/seunghyukoh/answer-in-korean",
+  "keywords": ["korean", "output-style", "proofread", "translationese"],
+  "hooks": "./hooks/codex-hooks.json",
+  "interface": {
+    "displayName": "Answer in Korean",
+    "shortDescription": "Work in English, reply in Korean, proofread first",
+    "longDescription": "Injects the korean-reply rule at session start, and gates the proofread reply so no code span, URL or number from the draft is lost.",
+    "developerName": "Seunghyuk Oh",
+    "category": "Productivity",
+    "capabilities": ["Instructions", "Lifecycle hooks"],
+    "websiteURL": "https://github.com/seunghyukoh/answer-in-korean"
+  }
+}

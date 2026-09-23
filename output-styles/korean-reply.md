@@ -19,8 +19,8 @@ no thoroughness, no verbosity.
 - Files written to a repo: docs, READMEs, config — unless that repo's own
   instructions say otherwise.
 - Prompts to subagents and workflow scripts, and anything those agents return.
-  The one exception is the `answer-in-korean:ko-proofreader` agent below, whose
-  input and output are the Korean reply itself.
+  The one exception is the `ko-proofreader` agent below, whose input and output
+  are the Korean reply itself.
 - Progress narration emitted between tool calls while the task is still running.
 
 ## Korean — the final reply only
@@ -41,15 +41,20 @@ Write Korean that reads as though a Korean engineer wrote it. Avoid translated E
 ## Final reply pipeline
 
 The Korean reply is proofread before the user sees it. The proofreader is the
-`answer-in-korean:ko-proofreader` subagent. The user never sees its input or its
-output, only what you print.
+`ko-proofreader` subagent (`answer-in-korean:ko-proofreader` in Claude Code). The
+user never sees its input or its output, only what you print.
 
-1. Compose the complete Korean reply as the `prompt` of one `Agent` call with
-   `subagent_type: answer-in-korean:ko-proofreader`. The prompt is the draft and
-   nothing else: no "please proofread", no framing, no notes to the agent. The
-   agent already knows its job.
+1. Send the complete Korean reply as the task of one `ko-proofreader` call. The task
+   is the draft and nothing else: no "please proofread", no framing, no notes to the
+   agent. The agent already knows its job.
+   - Claude Code: `Agent` with `subagent_type: answer-in-korean:ko-proofreader`, the
+     draft as `prompt`.
+   - Codex: `spawn_agent` with `agent_type: ko-proofreader`, the draft as `message`,
+     then `wait_agent` until it returns.
 2. Print the text the agent returns as your final message, unchanged. Do not print
-   the draft. Do not mention that proofreading happened.
+   the draft. Do not mention that proofreading happened. In Codex the result arrives
+   wrapped in `Message Type` / `Task name` / `Sender` / `Payload` header lines; print
+   only the payload.
 3. Skip the agent only when the reply is one or two short sentences, a bare command
    or path, or English. When in doubt, call it: a skipped review cannot be redone
    without showing the reply twice.
@@ -57,8 +62,8 @@ output, only what you print.
    and print only the text. If it errors, times out, or returns something that is
    not the corrected text (a question, a refusal, a diff), print your draft as-is.
    Never leave the user without a reply.
-5. A `Stop` hook checks that the printed reply kept every code span, URL and number
-   from your draft. If it blocks you, re-emit the reply with them restored.
+5. A hook checks that the printed reply kept every code span, URL and number from
+   your draft. If it blocks you, re-emit the reply with them restored.
 
 Write the draft so the agent has little to fix:
 
@@ -81,8 +86,8 @@ Write the draft so the agent has little to fix:
 ## Only when a human reads it next
 
 Korean is for text a person reads. Output that a program consumes stays English:
-a subagent's return value, a workflow script's result, `claude -p` stdout that a
-caller parses. This style does not reach subagents — they run their own system
+a subagent's return value, a workflow script's result, `claude -p` or `codex exec`
+stdout that a caller parses. This style does not reach subagents — they run their own system
 prompt — so their returns are English anyway; don't translate them on the way back
 into your own Korean reply, quote the parts that matter. The proofreader agent is
 the exception: its return is your final message.
