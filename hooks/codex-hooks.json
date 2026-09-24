@@ -1,0 +1,49 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "awk 'c>=2{print} /^---$/{c++}' \"${PLUGIN_ROOT}/output-styles/korean-reply.md\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "command -v python3 >/dev/null 2>&1 && python3 \"${PLUGIN_ROOT}/hooks/require-proofread.py\" || exit 0",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "command -v python3 >/dev/null 2>&1 && python3 \"${PLUGIN_ROOT}/hooks/require-proofread.py\" || exit 0",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "command -v python3 >/dev/null 2>&1 && python3 \"${PLUGIN_ROOT}/hooks/require-proofread.py\" || exit 0",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

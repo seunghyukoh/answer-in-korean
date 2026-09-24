@@ -1,11 +1,17 @@
 {
   "$schema": "https://anthropic.com/claude-code/plugin.schema.json",
   "name": "answer-in-korean",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Work in English, reply in Korean. Reasoning, tool calls, code and commit messages stay English; the final message is Korean and passes through a proofreader subagent before the user sees it.",
   "author": {
     "name": "Seunghyuk Oh",
     "email": "seunghyukoh0@gmail.com"
   },
-  "keywords": ["korean", "output-style", "proofread", "translationese"]
+  "hooks": "./hooks/hooks.json",
+  "keywords": [
+    "korean",
+    "output-style",
+    "proofread",
+    "translationese"
+  ]
 }

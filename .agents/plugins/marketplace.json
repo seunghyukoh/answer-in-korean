@@ -1,0 +1,20 @@
+{
+  "name": "answer-in-korean",
+  "interface": {
+    "displayName": "Answer in Korean"
+  },
+  "plugins": [
+    {
+      "name": "answer-in-korean",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
