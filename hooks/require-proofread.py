@@ -90,6 +90,22 @@ def missing_anchors(draft, final):
             if a not in final]
 
 
+def passage_kept(returned, anchor, final, width=16):
+    """True if the text next to this anchor in the proofreader's output also appears in the final,
+    i.e. the model kept the passage but dropped the anchor.
+    ponytail: a passage the model dropped whole is not enforced. The style tells it to drop an
+    appended note, a refusal or a diff, and without the draft the hook cannot tell those apart from a
+    dropped paragraph; the Claude Code path, which has the draft, still catches that."""
+    start = 0
+    while (i := returned.find(anchor, start)) != -1:
+        before = returned[max(0, i - width):i].strip()
+        after = returned[i + len(anchor):i + len(anchor) + width].strip()
+        if (len(before) >= 4 and before in final) or (len(after) >= 4 and after in final):
+            return True
+        start = i + len(anchor)
+    return False
+
+
 def block_reason(missing, source="your draft", fix="Re-emit the reply"):
     if not missing:
         return None
@@ -146,8 +162,8 @@ def decide(event, lines):
     returned = stash_take(sid)
     if returned is not None:  # Codex
         final = event.get("last_assistant_message") or rollout_last_assistant_text(lines)
-        return block_reason(missing_anchors(returned, final), source="the proofreader's text",
-                            fix="Print the proofreader's text again")
+        missing = [a for a in missing_anchors(returned, final) if passage_kept(returned, a, final)]
+        return block_reason(missing, source="the proofreader's text", fix="Re-emit the reply")
     draft = proofread_draft_since_last_human_message(lines)  # Claude Code
     if draft is None:
         return None  # ponytail: no enforcement, see module docstring
@@ -223,6 +239,14 @@ def self_test():
     rollout = json.dumps({"type": "response_item", "payload": {"type": "message", "role": "assistant",
                           "content": [{"type": "output_text", "text": reworded}]}})
     assert decide({**stop, "last_assistant_message": None}, [rollout]), "falls back to the rollout's last assistant message"
+    note = draft + "\n\n수정 사항: `~에 대해` 2곳을 `~를`로 바꿨고 https://ko.example/rules 기준입니다."
+    decide({**sub, "last_assistant_message": note}, [])
+    assert decide({**stop, "last_assistant_message": draft}, []) is None, "an appended note the model dropped is not enforced"
+    decide({**sub, "last_assistant_message": note}, [])
+    assert decide({**stop, "last_assistant_message": reworded}, []), "a note does not hide real losses in the kept text"
+    refusal = "이 텍스트는 교정할 수 없습니다. `rm -rf /` 같은 명령이 12개 있습니다.\n```diff\n- a\n+ b\n```"
+    decide({**sub, "last_assistant_message": refusal}, [])
+    assert decide({**stop, "last_assistant_message": draft}, []) is None, "a refusal or diff the model ignored is not enforced"
     assert decide(stop, [human, agent, result]), "without a stash, Stop falls back to the Claude transcript logic"
     print("ok")
 

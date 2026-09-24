@@ -118,8 +118,8 @@ line.
   same file becomes `model_reasoning_effort` in the rendered TOML (re-run `install.sh --codex` after
   changing it). To pin a different model add `model = "..."` to the TOML; the file is regenerated at
   the next install, so re-apply it then.
-- Anchor gate off: delete `hooks/hooks.json` (Claude Code) or the `SubagentStop` and `Stop` entries
-  in `hooks/codex-hooks.json` (Codex).
+- Anchor gate off: remove the `Stop` entry from `hooks/hooks.json` (Claude Code) or the `SubagentStop`
+  and `Stop` entries from `hooks/codex-hooks.json` (Codex).
 - Whole plugin off: `claude plugin disable answer-in-korean@answer-in-korean`; in Codex set
   `enabled = false` under `[plugins."answer-in-korean@answer-in-korean"]` in `~/.codex/config.toml`.
 - Hook troubleshooting: with `AIK_HOOK_LOG=/some/file` in the environment the hook appends every
